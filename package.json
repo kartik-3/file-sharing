@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "start": "parcel index.html",
-    "build": "parcel build index.html"
+    "build": "parcel build index.html",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "repository": {
     "type": "git",
@@ -16,7 +18,7 @@
   "bugs": {
     "url": "https://github.com/kartik-3/file-sharing/issues"
   },
-  "homepage": "https://github.com/kartik-3/file-sharing#readme",
+  "homepage": "https://kartik-3.github.io/file-sharing",
   "dependencies": {
     "@material-ui/core": "^4.11.3",
     "@material-ui/lab": "^4.0.0-alpha.57",
@@ -26,5 +28,8 @@
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-hook-form": "^6.14.2"
+  },
+  "devDependencies": {
+    "gh-pages": "^3.1.0"
   }
 }
