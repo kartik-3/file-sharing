@@ -8,6 +8,7 @@ import Grid from "@material-ui/core/Grid";
 import Alert from "@material-ui/lab/Alert";
 
 import Storage from "@aws-amplify/storage";
+import Auth from "@aws-amplify/auth";
 import "regenerator-runtime/runtime";
 
 import { configureAmplify, SetS3Config } from "../services/amplifyService";
