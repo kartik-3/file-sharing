@@ -1,0 +1,29 @@
+{
+  "name": "file-sharing",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "parcel index.html"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kartik-3/file-sharing.git"
+  },
+  "author": "Kartik Sehgal",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kartik-3/file-sharing/issues"
+  },
+  "homepage": "https://github.com/kartik-3/file-sharing#readme",
+  "dependencies": {
+    "@material-ui/core": "^4.11.3",
+    "@material-ui/lab": "^4.0.0-alpha.57",
+    "@types/react": "^17.0.0",
+    "aws-amplify": "^3.3.15",
+    "parcel-bundler": "^1.12.4",
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1",
+    "react-hook-form": "^6.14.2"
+  }
+}
