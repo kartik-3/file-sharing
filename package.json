@@ -6,8 +6,6 @@
   "scripts": {
     "start": "parcel index.html",
     "build": "parcel build index.html",
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d dist"
   },
   "repository": {
     "type": "git",
@@ -18,7 +16,7 @@
   "bugs": {
     "url": "https://github.com/kartik-3/file-sharing/issues"
   },
-  "homepage": ".",
+  "homepage": "https://github.com/kartik-3/file-sharing/#readme",
   "dependencies": {
     "@material-ui/core": "^4.11.3",
     "@material-ui/lab": "^4.0.0-alpha.57",
