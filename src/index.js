@@ -6,12 +6,8 @@ import { makeStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
 import Alert from "@material-ui/lab/Alert";
-
-import Storage from "@aws-amplify/storage";
-import Auth from "@aws-amplify/auth";
 import "regenerator-runtime/runtime";
 
-import { configureAmplify, SetS3Config } from "../services/amplifyService";
 import sendMail from "../services/mailer";
 import sendFile from "../services/file";
 
@@ -37,7 +33,6 @@ const useStyles = makeStyles((theme) => ({
 const App = () => {
   const [selectedFile, setSelectedFile] = useState();
   const [fileName, setFileName] = useState();
-  const [fileType, setFileType] = useState("");
   const [isFilePicked, setIsFilePicked] = useState(false);
   const [response, setResponse] = useState();
   const [isSubmitClicked, setIsSubmitClicked] = useState(false);
@@ -48,19 +43,10 @@ const App = () => {
 
   const classes = useStyles();
   const uploadFile = () => {
-    // SetS3Config(process.env.REACT_APP_bucket, "public");
     if (isFilePicked) {
       sendFile(selectedFile)
         .then((response) => {
           if (response.status == 200) {
-            alert("mail sent");
-            setResponse(
-              "File uploaded successfully! Check your email for the link to the file."
-            );
-            setUploadSuccess(true);
-            setIsFilePicked(false);
-            setIsSubmitClicked(false);
-            setFileName("Select another file");
             const newFileName = fileName.split(" ").join("+");
             const data = {
               fileName: newFileName,
@@ -68,44 +54,18 @@ const App = () => {
             };
             sendMail(data).then((response) => {
               if (response.status == 200) {
-                alert("mail sent");
+                setResponse(
+                  "File uploaded successfully! Check your email for the link to the file."
+                );
+                setUploadSuccess(true);
+                setIsFilePicked(false);
+                setIsSubmitClicked(false);
+                setFileName("Select another file");
               }
             });
           }
         })
         .catch((err) => setResponse(`Can not upload file: ${err}`));
-      // const formData = new FormData();
-      // formData.append("file", selectedFile);
-      // fetch("http://localhost:5000/email", {
-      //   body: formData,
-      //   method: "PUT",
-      //   // headers: {
-      //   //   "Content-Type": fileType,
-      //   // },
-      // })
-      //   .then((res) => res.json())
-      //   .then((data) => console.log(data));
-      // Storage.put(fileName, selectedFile, {
-      //   contentType: fileType,
-      // })
-      //   .then((result) => {
-      //     setResponse("File uploaded successfully! Check your email for the link to the file.");
-      //     setUploadSuccess(true);
-      //     setIsFilePicked(false);
-      //     setIsSubmitClicked(false);
-      //     setFileName("Select another file");
-      //     const newFileName = fileName.split(" ").join("+");
-      //     const data = {
-      //       fileName: newFileName,
-      //       email: emailValue,
-      //     };
-      //     sendMail(data).then((response) => {
-      //       if (response.status == 200) {
-      //         alert("mail sent");
-      //       }
-      //     });
-      //   })
-      //   .catch((err) => setResponse(`Can not upload file: ${err}`));
     }
   };
 
@@ -113,7 +73,6 @@ const App = () => {
     setUploadSuccess(false);
     setSelectedFile(e.target.files[0]);
     setFileName(e.target.files[0].name);
-    setFileType(e.target.files[0].type);
     setIsFilePicked(true);
   };
 
@@ -204,7 +163,5 @@ const App = () => {
     </div>
   );
 };
-
-configureAmplify();
 
 render(<App />, document.querySelector("#react-root"));
