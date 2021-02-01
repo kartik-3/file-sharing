@@ -1,5 +1,6 @@
 const sendMail = async (data) => {
-  const response = await fetch("https://file-sharing-app-kartik.herokuapp.com/email", {
+  // https://file-sharing-app-kartik.herokuapp.com/email
+  const response = await fetch("http://localhost:5000/email", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -10,3 +11,4 @@ const sendMail = async (data) => {
 };
 
 export default sendMail;
+

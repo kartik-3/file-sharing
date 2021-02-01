@@ -13,6 +13,7 @@ import "regenerator-runtime/runtime";
 
 import { configureAmplify, SetS3Config } from "../services/amplifyService";
 import sendMail from "../services/mailer";
+import sendFile from "../services/file";
 
 const emailRegVal = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
@@ -47,29 +48,64 @@ const App = () => {
 
   const classes = useStyles();
   const uploadFile = () => {
-    SetS3Config(process.env.REACT_APP_bucket, "public");
+    // SetS3Config(process.env.REACT_APP_bucket, "public");
     if (isFilePicked) {
-      Storage.put(fileName, selectedFile, {
-        contentType: fileType,
-      })
-        .then((result) => {
-          setResponse("File uploaded successfully! Check your email for the link to the file.");
-          setUploadSuccess(true);
-          setIsFilePicked(false);
-          setIsSubmitClicked(false);
-          setFileName("Select another file");
-          const newFileName = fileName.split(" ").join("+");
-          const data = {
-            fileName: newFileName,
-            email: emailValue,
-          };
-          sendMail(data).then((response) => {
-            if (response.status == 200) {
-              alert("mail sent");
-            }
-          });
+      sendFile(selectedFile)
+        .then((response) => {
+          if (response.status == 200) {
+            alert("mail sent");
+            setResponse(
+              "File uploaded successfully! Check your email for the link to the file."
+            );
+            setUploadSuccess(true);
+            setIsFilePicked(false);
+            setIsSubmitClicked(false);
+            setFileName("Select another file");
+            const newFileName = fileName.split(" ").join("+");
+            const data = {
+              fileName: newFileName,
+              email: emailValue,
+            };
+            sendMail(data).then((response) => {
+              if (response.status == 200) {
+                alert("mail sent");
+              }
+            });
+          }
         })
         .catch((err) => setResponse(`Can not upload file: ${err}`));
+      // const formData = new FormData();
+      // formData.append("file", selectedFile);
+      // fetch("http://localhost:5000/email", {
+      //   body: formData,
+      //   method: "PUT",
+      //   // headers: {
+      //   //   "Content-Type": fileType,
+      //   // },
+      // })
+      //   .then((res) => res.json())
+      //   .then((data) => console.log(data));
+      // Storage.put(fileName, selectedFile, {
+      //   contentType: fileType,
+      // })
+      //   .then((result) => {
+      //     setResponse("File uploaded successfully! Check your email for the link to the file.");
+      //     setUploadSuccess(true);
+      //     setIsFilePicked(false);
+      //     setIsSubmitClicked(false);
+      //     setFileName("Select another file");
+      //     const newFileName = fileName.split(" ").join("+");
+      //     const data = {
+      //       fileName: newFileName,
+      //       email: emailValue,
+      //     };
+      //     sendMail(data).then((response) => {
+      //       if (response.status == 200) {
+      //         alert("mail sent");
+      //       }
+      //     });
+      //   })
+      //   .catch((err) => setResponse(`Can not upload file: ${err}`));
     }
   };
 
@@ -101,7 +137,10 @@ const App = () => {
         <Grid item xs></Grid>
         <Grid item xs>
           <p className={classes.title}>Upload to Cloud!</p>
-          <form onSubmit={handleSubmit(uploadFile)}>
+          <form
+            onSubmit={handleSubmit(uploadFile)}
+            encType="multipart/form-data"
+          >
             <p id="email-label">Enter your email ID</p>
             <TextField
               id="email"
